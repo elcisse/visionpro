@@ -327,6 +327,12 @@ return [
             'icon' => 'fas fa-fw fa-truck-monster',
             'can' => 'engins.view',
         ],
+        [
+            'text' => 'Chauffeurs',
+            'route' => 'chauffeurs.index',
+            'icon' => 'fas fa-fw fa-id-card',
+            'can' => 'chauffeurs.view',
+        ],
     ],
 
     /*
