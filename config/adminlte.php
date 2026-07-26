@@ -333,6 +333,12 @@ return [
             'icon' => 'fas fa-fw fa-id-card',
             'can' => 'chauffeurs.view',
         ],
+        [
+            'text' => 'Maintenance',
+            'route' => 'maintenances.index',
+            'icon' => 'fas fa-fw fa-tools',
+            'can' => 'maintenances.view',
+        ],
         ['header' => 'Commercial'],
         [
             'text' => 'Clients',

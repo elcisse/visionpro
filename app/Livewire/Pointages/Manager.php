@@ -78,7 +78,7 @@ class Manager extends Component
         $this->pointageId = $pointage->id;
         $this->contrat_id = $pointage->contrat_id;
         $this->chauffeur_id = $pointage->chauffeur_id;
-        $this->date = optional($pointage->date)->format('Y-m-d');
+        $this->date = $pointage->date?->format('Y-m-d') ?? '';
         $this->heures_travaillees = (string) $pointage->heures_travaillees;
         $this->en_panne = $pointage->en_panne;
         $this->heures_panne = (string) $pointage->heures_panne;

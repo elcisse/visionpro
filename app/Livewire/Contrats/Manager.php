@@ -88,8 +88,8 @@ class Manager extends Component
         $this->contratId = $contrat->id;
         $this->client_id = $contrat->client_id;
         $this->engin_id = $contrat->engin_id;
-        $this->date_debut = optional($contrat->date_debut)->format('Y-m-d');
-        $this->date_fin = optional($contrat->date_fin)->format('Y-m-d');
+        $this->date_debut = $contrat->date_debut?->format('Y-m-d') ?? '';
+        $this->date_fin = $contrat->date_fin?->format('Y-m-d') ?? '';
         $this->lieu_chantier = (string) $contrat->lieu_chantier;
         $this->tarif_horaire = (string) $contrat->tarif_horaire;
         $this->statut = $contrat->statut;
