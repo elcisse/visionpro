@@ -340,6 +340,12 @@ return [
             'icon' => 'fas fa-fw fa-user-tie',
             'can' => 'clients.view',
         ],
+        [
+            'text' => 'Contrats',
+            'route' => 'contrats.index',
+            'icon' => 'fas fa-fw fa-file-contract',
+            'can' => 'contrats.view',
+        ],
     ],
 
     /*

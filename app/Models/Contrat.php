@@ -13,6 +13,7 @@ class Contrat extends Model
         'date_debut',
         'date_fin',
         'lieu_chantier',
+        'document_pdf',
         'tarif_horaire',
         'statut',
     ];
