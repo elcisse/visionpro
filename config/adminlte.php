@@ -333,6 +333,13 @@ return [
             'icon' => 'fas fa-fw fa-id-card',
             'can' => 'chauffeurs.view',
         ],
+        ['header' => 'Commercial'],
+        [
+            'text' => 'Clients',
+            'route' => 'clients.index',
+            'icon' => 'fas fa-fw fa-user-tie',
+            'can' => 'clients.view',
+        ],
     ],
 
     /*
