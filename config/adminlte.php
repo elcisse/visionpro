@@ -346,6 +346,12 @@ return [
             'icon' => 'fas fa-fw fa-file-contract',
             'can' => 'contrats.view',
         ],
+        [
+            'text' => 'Pointage journalier',
+            'route' => 'pointages.index',
+            'icon' => 'fas fa-fw fa-clipboard-check',
+            'can' => 'pointages.view',
+        ],
     ],
 
     /*

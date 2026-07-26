@@ -5,6 +5,7 @@ use App\Livewire\Chauffeurs\Manager as ChauffeursManager;
 use App\Livewire\Clients\Manager as ClientsManager;
 use App\Livewire\Contrats\Manager as ContratsManager;
 use App\Livewire\Engins\Manager as EnginsManager;
+use App\Livewire\Pointages\Manager as PointagesManager;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -27,6 +28,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/chauffeurs', ChauffeursManager::class)->name('chauffeurs.index');
     Route::get('/clients', ClientsManager::class)->name('clients.index');
     Route::get('/contrats', ContratsManager::class)->name('contrats.index');
+    Route::get('/pointages', PointagesManager::class)->name('pointages.index');
 
     Route::get('/test-integration', function () {
         return view('test-integration');
