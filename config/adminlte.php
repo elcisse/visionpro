@@ -358,6 +358,13 @@ return [
             'icon' => 'fas fa-fw fa-clipboard-check',
             'can' => 'pointages.view',
         ],
+        ['header' => 'Facturation'],
+        [
+            'text' => 'Factures',
+            'route' => 'factures.index',
+            'icon' => 'fas fa-fw fa-file-invoice-dollar',
+            'can' => 'factures.view',
+        ],
     ],
 
     /*
