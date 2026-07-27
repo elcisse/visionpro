@@ -5,6 +5,7 @@ namespace App\Livewire\Contrats;
 use App\Models\Client;
 use App\Models\Contrat;
 use App\Models\Engin;
+use App\Services\EnginStatutService;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -102,6 +103,8 @@ class Manager extends Component
     {
         $this->authorize($this->contratId ? 'contrats.update' : 'contrats.create');
 
+        $ancienEnginId = $this->contratId ? Contrat::find($this->contratId)?->engin_id : null;
+
         $data = $this->validate();
         unset($data['documentPdf']);
 
@@ -114,7 +117,13 @@ class Manager extends Component
             $data['document_pdf'] = $this->documentPdf->store('contrats', 'public');
         }
 
-        Contrat::updateOrCreate(['id' => $this->contratId], $data);
+        $contrat = Contrat::updateOrCreate(['id' => $this->contratId], $data);
+
+        EnginStatutService::synchroniser($contrat->engin);
+
+        if ($ancienEnginId && $ancienEnginId !== $contrat->engin_id) {
+            EnginStatutService::synchroniser(Engin::find($ancienEnginId));
+        }
 
         $this->showModal = false;
         $this->resetFields();
@@ -125,12 +134,15 @@ class Manager extends Component
         $this->authorize('contrats.delete');
 
         $contrat = Contrat::findOrFail($id);
+        $engin = $contrat->engin;
 
         if ($contrat->document_pdf) {
             Storage::disk('public')->delete($contrat->document_pdf);
         }
 
         $contrat->delete();
+
+        EnginStatutService::synchroniser($engin);
     }
 
     public function closeModal(): void

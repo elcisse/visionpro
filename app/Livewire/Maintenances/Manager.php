@@ -4,6 +4,7 @@ namespace App\Livewire\Maintenances;
 
 use App\Models\Engin;
 use App\Models\Maintenance;
+use App\Services\EnginStatutService;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -89,11 +90,19 @@ class Manager extends Component
     {
         $this->authorize($this->maintenanceId ? 'maintenances.update' : 'maintenances.create');
 
+        $ancienEnginId = $this->maintenanceId ? Maintenance::find($this->maintenanceId)?->engin_id : null;
+
         $data = $this->validate();
         $data['cout'] = $data['cout'] !== '' ? $data['cout'] : null;
         $data['date_fin'] = $this->date_fin ?: null;
 
-        Maintenance::updateOrCreate(['id' => $this->maintenanceId], $data);
+        $maintenance = Maintenance::updateOrCreate(['id' => $this->maintenanceId], $data);
+
+        EnginStatutService::synchroniser($maintenance->engin);
+
+        if ($ancienEnginId && $ancienEnginId !== $maintenance->engin_id) {
+            EnginStatutService::synchroniser(Engin::find($ancienEnginId));
+        }
 
         $this->showModal = false;
         $this->resetFields();
@@ -103,7 +112,11 @@ class Manager extends Component
     {
         $this->authorize('maintenances.delete');
 
-        Maintenance::findOrFail($id)->delete();
+        $maintenance = Maintenance::findOrFail($id);
+        $engin = $maintenance->engin;
+        $maintenance->delete();
+
+        EnginStatutService::synchroniser($engin);
     }
 
     public function closeModal(): void

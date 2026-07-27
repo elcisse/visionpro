@@ -41,4 +41,24 @@ class Engin extends Model
     {
         return $this->hasMany(Charge::class);
     }
+
+    public function factures()
+    {
+        return $this->hasManyThrough(Facture::class, Contrat::class);
+    }
+
+    public function recettesTotales(): float
+    {
+        return (float) $this->factures()->sum('montant');
+    }
+
+    public function chargesTotales(): float
+    {
+        return (float) $this->charges()->sum('montant');
+    }
+
+    public function rentabilite(): float
+    {
+        return $this->recettesTotales() - $this->chargesTotales();
+    }
 }

@@ -25,11 +25,15 @@
                         <th>Tarif horaire</th>
                         <th>Compteur (h)</th>
                         <th>Statut</th>
+                        <th>Recettes</th>
+                        <th>Charges</th>
+                        <th>Rentabilité</th>
                         <th class="text-right">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($engins as $engin)
+                        @php ($rentabilite = ($engin->recettes_total ?? 0) - ($engin->charges_total ?? 0))
                         <tr wire:key="engin-{{ $engin->id }}">
                             <td>{{ $engin->designation }}</td>
                             <td>{{ $engin->categorie }}</td>
@@ -47,6 +51,11 @@
                                 ])>
                                     {{ $statuts[$engin->statut] ?? $engin->statut }}
                                 </span>
+                            </td>
+                            <td>{{ number_format($engin->recettes_total ?? 0, 0, ',', ' ') }} FCFA</td>
+                            <td>{{ number_format($engin->charges_total ?? 0, 0, ',', ' ') }} FCFA</td>
+                            <td class="{{ $rentabilite >= 0 ? 'text-success' : 'text-danger' }}">
+                                {{ number_format($rentabilite, 0, ',', ' ') }} FCFA
                             </td>
                             <td class="text-right">
                                 @can('engins.update')
@@ -66,7 +75,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="text-center text-muted py-4">Aucun engin trouvé.</td>
+                            <td colspan="10" class="text-center text-muted py-4">Aucun engin trouvé.</td>
                         </tr>
                     @endforelse
                 </tbody>

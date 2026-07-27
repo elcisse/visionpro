@@ -127,6 +127,8 @@ class Manager extends Component
 
         return view('livewire.engins.manager', [
             'engins' => Engin::query()
+                ->withSum('charges as charges_total', 'montant')
+                ->withSum('factures as recettes_total', 'montant')
                 ->when($this->search, fn ($query) => $query
                     ->where('designation', 'like', "%{$this->search}%")
                     ->orWhere('categorie', 'like', "%{$this->search}%")
