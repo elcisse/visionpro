@@ -10,9 +10,24 @@ Rôles/permissions installés : `spatie/laravel-permission` avec 6 rôles (Super
 
 Authentification minimale en place (pas de laravel/ui, pas de registration — app interne) : `App\Http\Controllers\Auth\LoginController` (login/logout classiques), vue `adminlte::auth.login` du package réutilisée directement, routes `/login` (guest) et `/logout` + `/dashboard` (auth) dans `routes/web.php`. `config/adminlte.php` : `dashboard_url=dashboard`, `register_url`/`password_reset_url` désactivés (false), menu latéral remplacé par le vrai menu de l'app (Tableau de bord, Engins avec `'can' => 'engins.view'`).
 
-Premier CRUD Livewire+AdminLTE construit et testé de bout en bout (login réel via curl, permissions vérifiées avec Gate::before et avec un rôle restreint) : **Engins** (`App\Livewire\Engins\Manager`, vue `resources/views/livewire/engins/manager.blade.php`, route `engins.index`). Sert de patron à reproduire pour les autres entités (liste paginée + recherche + modal create/edit + delete, gates `module.action`).
+**Phase 0 (git) et Phase 1 (CRUD) terminées.** Dépôt : https://github.com/elcisse/visionpro (branche `main`, tout committé et poussé au fil de l'eau).
 
-Pas encore fait : CRUD pour les 10 autres entités (chauffeurs, affectations, clients, contrats, pointages, maintenances, factures, paiements, charges, entreprise), logique métier transverse (synchronisation du statut d'un engin selon contrat/panne/entretien, calcul du solde et du statut de facture selon paiements, calcul de rentabilité), intégration des packages ci-dessous.
+Tous les CRUD Livewire+AdminLTE sont construits, testés de bout en bout (login réel via curl/tinker, permissions vérifiées) et poussés :
+- `App\Livewire\Engins\Manager` — patron initial (liste + recherche + modal create/edit + delete, gates `module.action`).
+- `App\Livewire\Chauffeurs\Manager`
+- `App\Livewire\Clients\Manager`
+- `App\Livewire\Contrats\Manager` — inclut l'upload du contrat en PDF (`document_pdf`, validation `mimes:pdf`, 10 Mo max, ancien fichier supprimé au remplacement).
+- `App\Livewire\Pointages\Manager` — contrainte d'unicité (contrat, date) validée côté formulaire.
+- `App\Livewire\Maintenances\Manager`
+- `App\Livewire\Factures\Manager` — **calcule automatiquement** heures facturées et montant depuis les pointages de la période choisie (× tarif horaire du contrat), modifiable ensuite.
+- `App\Livewire\Paiements\Manager` — affiche le solde restant dû et **resynchronise automatiquement** le statut de la facture (émise/partiellement payée/payée) à chaque paiement créé ou supprimé.
+- `App\Livewire\Charges\Manager` — maintenance liée optionnelle, pré-remplit type/montant depuis celle-ci.
+- `App\Livewire\Entreprise\Settings` — formulaire singleton (pas de liste), upload logo.
+- `App\Livewire\Utilisateurs\Manager` — gestion des comptes + rôles multiples (`syncRoles`), protection anti-auto-suppression.
+
+Bug corrigé au passage : `edit()` plantait (TypeError) sur Contrats/Pointages/Maintenances quand une date nullable (ex: `date_fin`) était `null` en base, à cause de propriétés Livewire typées `string` non-nullable alimentées via `optional()->format()`. Remplacé par `?->format() ?? ''`.
+
+Pas encore fait : logique métier transverse restante (synchronisation du statut d'un engin selon contrat/panne/entretien, calcul de rentabilité par engin), dashboard/reporting, intégration des packages ci-dessous, tests automatisés, préparation déploiement.
 
 ## Packages ajoutés par l'utilisateur (hors scaffolding initial)
 
@@ -94,10 +109,10 @@ Décisions clés :
 
 Plan complet (dev → déploiement) dans `docs/plan-deploiement.md`. Résumé :
 
-- **Phase 0** (urgent, pas encore fait) : premier commit git + dépôt distant — le code n'existe qu'en local pour l'instant.
-- **Phase 1** : reproduire le patron CRUD des Engins pour chauffeurs, clients, contrats, pointages, maintenances, factures, paiements, charges, page entreprise (singleton), gestion utilisateurs/rôles.
-- **Phase 2** : logique métier transverse (statut engin auto, statut/solde facture, rentabilité par engin).
-- **Phase 3** : dashboard & reporting.
-- **Phase 4** : intégration dompdf/medialibrary/activitylog/simple-excel.
+- ~~**Phase 0** : premier commit git + dépôt distant.~~ Fait.
+- ~~**Phase 1** : CRUD pour toutes les entités.~~ Fait.
+- **Phase 2** (reste à faire) : synchronisation du statut engin (disponible/en_location/en_panne/en_entretien) selon contrats/pannes/entretiens en cours ; calcul de rentabilité par engin (recettes factures − charges). Le calcul auto des heures/montant de facture et la synchro statut facture↔paiements sont déjà faits (voir ci-dessus).
+- **Phase 3** : dashboard & reporting (recettes réelles vs prévisionnelles, taux d'utilisation du parc, alertes).
+- **Phase 4** : intégration dompdf/medialibrary/activitylog/simple-excel (reportée, pas encore priorisée avec l'utilisateur).
 - **Phase 5-6** : tests automatisés, durcissement/revue de code.
-- **Phase 7-9** : préparation déploiement (PHP ≥ 8.4 requis chez l'hébergeur, mot de passe admin à changer), déploiement, recette utilisateur, suivi post-lancement.
+- **Phase 7-9** : préparation déploiement (PHP ≥ 8.4 requis chez l'hébergeur, mot de passe admin `admin123` à changer), déploiement, recette utilisateur, suivi post-lancement.
