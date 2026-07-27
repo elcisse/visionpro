@@ -15,6 +15,7 @@ use App\Livewire\Factures\Manager as FacturesManager;
 use App\Livewire\Maintenances\Manager as MaintenancesManager;
 use App\Livewire\Paiements\Manager as PaiementsManager;
 use App\Livewire\Pointages\Manager as PointagesManager;
+use App\Livewire\Rapports\RecettesPrevisionnelles;
 use App\Livewire\Utilisateurs\Manager as UtilisateursManager;
 use Illuminate\Support\Facades\Route;
 
@@ -43,6 +44,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/factures/{facture}/pdf', [FacturePdfController::class, 'show'])->name('factures.pdf');
     Route::get('/paiements', PaiementsManager::class)->name('paiements.index');
     Route::get('/charges', ChargesManager::class)->name('charges.index');
+    Route::get('/rapports/recettes-previsionnelles', RecettesPrevisionnelles::class)->name('rapports.recettes-previsionnelles');
     Route::get('/entreprise', EntrepriseSettings::class)->name('entreprise.edit');
     Route::get('/utilisateurs', UtilisateursManager::class)->name('utilisateurs.index');
     Route::get('/audit', AuditManager::class)->name('audit.index');

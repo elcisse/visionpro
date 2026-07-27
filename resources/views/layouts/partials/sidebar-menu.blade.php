@@ -31,6 +31,12 @@
             ],
         ],
         [
+            'header' => 'Rapports',
+            'items' => [
+                ['text' => 'Recettes prévisionnelles', 'route' => 'rapports.recettes-previsionnelles', 'icon' => 'fa-chart-line', 'can' => 'engins.view'],
+            ],
+        ],
+        [
             'header' => 'Administration',
             'items' => [
                 ['text' => 'Entreprise', 'route' => 'entreprise.edit', 'icon' => 'fa-building', 'can' => 'entreprise.view'],
