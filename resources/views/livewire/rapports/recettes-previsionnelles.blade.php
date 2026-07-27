@@ -2,6 +2,11 @@
     <div class="card card-primary card-outline">
         <div class="card-header">
             <h3 class="card-title">Recettes prévisionnelles</h3>
+            <div class="card-tools">
+                <a href="{{ route('rapports.recettes-previsionnelles.export') }}" class="btn btn-sm btn-success">
+                    <i class="fas fa-file-excel"></i> Exporter Excel
+                </a>
+            </div>
         </div>
         <div class="card-body p-0">
             <table class="table table-bordered mb-0">

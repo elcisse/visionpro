@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ContratPdfController;
 use App\Http\Controllers\FacturePdfController;
+use App\Http\Controllers\RecettesPrevisionnellesExportController;
 use App\Livewire\Audit\Manager as AuditManager;
 use App\Livewire\Charges\Manager as ChargesManager;
 use App\Livewire\Chauffeurs\Manager as ChauffeursManager;
@@ -45,6 +46,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/paiements', PaiementsManager::class)->name('paiements.index');
     Route::get('/charges', ChargesManager::class)->name('charges.index');
     Route::get('/rapports/recettes-previsionnelles', RecettesPrevisionnelles::class)->name('rapports.recettes-previsionnelles');
+    Route::get('/rapports/recettes-previsionnelles/export', [RecettesPrevisionnellesExportController::class, 'export'])->name('rapports.recettes-previsionnelles.export');
     Route::get('/entreprise', EntrepriseSettings::class)->name('entreprise.edit');
     Route::get('/utilisateurs', UtilisateursManager::class)->name('utilisateurs.index');
     Route::get('/audit', AuditManager::class)->name('audit.index');
