@@ -31,15 +31,12 @@ Bug corrigé au passage : `edit()` plantait (TypeError) sur Contrats/Pointages/M
 
 Pas encore fait : logique métier transverse restante (synchronisation du statut d'un engin selon contrat/panne/entretien, calcul de rentabilité par engin), dashboard/reporting, intégration des packages ci-dessous, tests automatisés, préparation déploiement.
 
-## Packages ajoutés par l'utilisateur (hors scaffolding initial)
+## Packages ajoutés par l'utilisateur (hors scaffolding initial) — Phase 4
 
-Ajoutés directement par l'utilisateur dans `composer.json`, pas encore intégrés dans le code métier :
-- `barryvdh/laravel-dompdf` — pressenti pour générer les PDF de contrats/factures.
-- `spatie/laravel-medialibrary` — pressenti pour les photos d'engins / logo entreprise.
-- `spatie/laravel-activitylog` — pressenti pour un journal d'audit sur les entités sensibles (contrats, factures, paiements).
-- `spatie/simple-excel` — pressenti pour l'export Excel des rapports (recettes, rentabilité).
-
-À confirmer avec l'utilisateur avant intégration : quel module en premier, et sur quelles entités précisément.
+- ~~`barryvdh/laravel-dompdf`~~ **Intégré** : PDF contrats (`ContratPdfController`, `pdf/contrat.blade.php`) et factures (`FacturePdfController`, `pdf/facture.blade.php`), boutons sur les listes Contrats/Factures.
+- `spatie/laravel-medialibrary` — pas encore intégré (photos d'engins / logo entreprise).
+- `spatie/laravel-activitylog` — pas encore intégré (journal d'audit contrats/factures/paiements).
+- `spatie/simple-excel` — pas encore intégré (export Excel des rapports).
 
 ## Stack technique
 
@@ -124,6 +121,6 @@ Plan complet (dev → déploiement) dans `docs/plan-deploiement.md`. Résumé :
 - ~~**Phase 1** : CRUD pour toutes les entités.~~ Fait.
 - ~~**Phase 2** : logique métier transverse.~~ Fait — `App\Services\EnginStatutService` synchronise le statut engin (disponible/en_location/en_panne/en_entretien, priorité panne > entretien > location, `hors_service` jamais touché automatiquement) après chaque save/delete de Contrat ou Maintenance ; `Engin::rentabilite()` (recettes via `factures()` hasManyThrough, − charges) affiché sur la liste des Engins.
 - ~~**Phase 3** : dashboard & reporting.~~ Fait — `App\Livewire\Dashboard\Show` affiche recettes réelles vs prévisionnelles (mois), taux d'utilisation du parc, engins en panne/entretien, factures impayées (montant restant dû) et en retard. `APP_LOCALE=fr` pour l'affichage des dates.
-- **Phase 4** (prochaine) : intégration dompdf/medialibrary/activitylog/simple-excel (reportée, pas encore priorisée avec l'utilisateur).
+- **Phase 4** (en cours) : intégration dompdf (fait) / medialibrary / activitylog / simple-excel (reste à faire, voir section dédiée ci-dessus).
 - **Phase 5-6** : tests automatisés, durcissement/revue de code.
 - **Phase 7-9** : préparation déploiement (PHP ≥ 8.4 requis chez l'hébergeur, mot de passe admin `admin123` à changer), déploiement, recette utilisateur, suivi post-lancement.
