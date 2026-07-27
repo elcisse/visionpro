@@ -384,6 +384,12 @@ return [
             'icon' => 'fas fa-fw fa-building',
             'can' => 'entreprise.view',
         ],
+        [
+            'text' => 'Utilisateurs & rôles',
+            'route' => 'utilisateurs.index',
+            'icon' => 'fas fa-fw fa-users-cog',
+            'can' => 'utilisateurs.view',
+        ],
     ],
 
     /*
