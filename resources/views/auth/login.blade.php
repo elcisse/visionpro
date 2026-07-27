@@ -71,17 +71,12 @@
                                 @enderror
                             </div>
 
-                            <div class="row">
-                                <div class="col-7">
-                                    <div class="form-check">
-                                        <input type="checkbox" name="remember" id="remember" class="form-check-input">
-                                        <label for="remember" class="form-check-label">Se souvenir de moi</label>
-                                    </div>
-                                </div>
-                                <div class="col-5">
-                                    <button type="submit" class="btn btn-primary btn-block">Se connecter</button>
-                                </div>
+                            <div class="form-check mb-3">
+                                <input type="checkbox" name="remember" id="remember" class="form-check-input">
+                                <label for="remember" class="form-check-label">Se souvenir de moi</label>
                             </div>
+
+                            <button type="submit" class="btn btn-primary btn-block" style="white-space: nowrap;">Se connecter</button>
                         </form>
                     </div>
                 </div>
