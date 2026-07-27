@@ -377,6 +377,13 @@ return [
             'icon' => 'fas fa-fw fa-money-bill-wave',
             'can' => 'paiements.view',
         ],
+        ['header' => 'Administration'],
+        [
+            'text' => 'Entreprise',
+            'route' => 'entreprise.edit',
+            'icon' => 'fas fa-fw fa-building',
+            'can' => 'entreprise.view',
+        ],
     ],
 
     /*

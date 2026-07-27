@@ -6,6 +6,7 @@ use App\Livewire\Chauffeurs\Manager as ChauffeursManager;
 use App\Livewire\Clients\Manager as ClientsManager;
 use App\Livewire\Contrats\Manager as ContratsManager;
 use App\Livewire\Engins\Manager as EnginsManager;
+use App\Livewire\Entreprise\Settings as EntrepriseSettings;
 use App\Livewire\Factures\Manager as FacturesManager;
 use App\Livewire\Maintenances\Manager as MaintenancesManager;
 use App\Livewire\Paiements\Manager as PaiementsManager;
@@ -37,6 +38,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/factures', FacturesManager::class)->name('factures.index');
     Route::get('/paiements', PaiementsManager::class)->name('paiements.index');
     Route::get('/charges', ChargesManager::class)->name('charges.index');
+    Route::get('/entreprise', EntrepriseSettings::class)->name('entreprise.edit');
 
     Route::get('/test-integration', function () {
         return view('test-integration');
