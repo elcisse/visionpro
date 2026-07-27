@@ -67,6 +67,10 @@
                                 {{ number_format($rentabilite, 0, ',', ' ') }} FCFA
                             </td>
                             <td class="text-right">
+                                <a href="{{ route('engins.show', $engin) }}" wire:navigate
+                                    class="btn btn-sm btn-outline-primary" title="Voir la fiche">
+                                    <i class="fas fa-eye"></i>
+                                </a>
                                 @can('engins.update')
                                     <button type="button" wire:click="edit({{ $engin->id }})"
                                         class="btn btn-sm btn-outline-secondary">

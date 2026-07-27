@@ -10,6 +10,7 @@ use App\Livewire\Chauffeurs\Manager as ChauffeursManager;
 use App\Livewire\Clients\Manager as ClientsManager;
 use App\Livewire\Contrats\Manager as ContratsManager;
 use App\Livewire\Dashboard\Show as DashboardShow;
+use App\Livewire\Engins\Fiche as EnginFiche;
 use App\Livewire\Engins\Manager as EnginsManager;
 use App\Livewire\Entreprise\Settings as EntrepriseSettings;
 use App\Livewire\Factures\Manager as FacturesManager;
@@ -35,6 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', DashboardShow::class)->name('dashboard');
 
     Route::get('/engins', EnginsManager::class)->name('engins.index');
+    Route::get('/engins/{engin}', EnginFiche::class)->name('engins.show');
     Route::get('/chauffeurs', ChauffeursManager::class)->name('chauffeurs.index');
     Route::get('/clients', ClientsManager::class)->name('clients.index');
     Route::get('/contrats', ContratsManager::class)->name('contrats.index');

@@ -52,6 +52,11 @@ class Engin extends Model implements HasMedia
         return $this->hasManyThrough(Facture::class, Contrat::class);
     }
 
+    public function pointages()
+    {
+        return $this->hasManyThrough(Pointage::class, Contrat::class);
+    }
+
     public function recettesTotales(): float
     {
         return (float) $this->factures()->sum('montant');
@@ -65,6 +70,11 @@ class Engin extends Model implements HasMedia
     public function rentabilite(): float
     {
         return $this->recettesTotales() - $this->chargesTotales();
+    }
+
+    public function heuresTravailleesCumulees(): float
+    {
+        return (float) $this->pointages()->sum('heures_travaillees');
     }
 
     public function registerMediaCollections(): void
