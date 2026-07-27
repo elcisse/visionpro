@@ -57,7 +57,7 @@
         </div>
 
         <div class="col-lg-4 col-md-6 col-12">
-            <div class="small-box" style="background-color: #25D366; color: #fff;">
+            <div class="small-box bg-orange">
                 <div class="inner">
                     <h3>{{ $facturesEnRetard }}</h3>
                     <p>Factures en retard (échéance dépassée)</p>
