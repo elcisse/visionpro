@@ -365,6 +365,12 @@ return [
             'icon' => 'fas fa-fw fa-file-invoice-dollar',
             'can' => 'factures.view',
         ],
+        [
+            'text' => 'Paiements',
+            'route' => 'paiements.index',
+            'icon' => 'fas fa-fw fa-money-bill-wave',
+            'can' => 'paiements.view',
+        ],
     ],
 
     /*
