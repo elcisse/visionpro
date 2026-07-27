@@ -5,11 +5,14 @@ namespace App\Livewire\Engins;
 use App\Models\Engin;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 use Livewire\WithPagination;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 #[Layout('layouts.admin', ['title' => 'Gestion des engins'])]
 class Manager extends Component
 {
+    use WithFileUploads;
     use WithPagination;
 
     public string $search = '';
@@ -34,6 +37,8 @@ class Manager extends Component
 
     public string $compteur_horaire = '0';
 
+    public array $photos = [];
+
     public array $statuts = [
         'disponible' => 'Disponible',
         'en_location' => 'En location',
@@ -53,6 +58,7 @@ class Manager extends Component
             'tarif_horaire' => 'required|numeric|min:0',
             'statut' => 'required|in:'.implode(',', array_keys($this->statuts)),
             'compteur_horaire' => 'required|numeric|min:0',
+            'photos.*' => 'nullable|image|max:2048',
         ];
     }
 
@@ -90,11 +96,25 @@ class Manager extends Component
         $this->authorize($this->enginId ? 'engins.update' : 'engins.create');
 
         $data = $this->validate();
+        unset($data['photos']);
 
-        Engin::updateOrCreate(['id' => $this->enginId], $data);
+        $engin = Engin::updateOrCreate(['id' => $this->enginId], $data);
+
+        foreach ($this->photos as $photo) {
+            $engin->addMedia($photo->getRealPath())
+                ->usingFileName($photo->getClientOriginalName())
+                ->toMediaCollection('photos');
+        }
 
         $this->showModal = false;
         $this->resetFields();
+    }
+
+    public function deletePhoto(int $mediaId): void
+    {
+        $this->authorize('engins.update');
+
+        Media::findOrFail($mediaId)->delete();
     }
 
     public function delete(int $id): void
@@ -114,7 +134,7 @@ class Manager extends Component
     {
         $this->reset([
             'enginId', 'designation', 'categorie', 'marque', 'modele',
-            'numero_serie', 'tarif_horaire', 'compteur_horaire',
+            'numero_serie', 'tarif_horaire', 'compteur_horaire', 'photos',
         ]);
         $this->statut = 'disponible';
         $this->compteur_horaire = '0';
@@ -127,6 +147,7 @@ class Manager extends Component
 
         return view('livewire.engins.manager', [
             'engins' => Engin::query()
+                ->with('media')
                 ->withSum('charges as charges_total', 'montant')
                 ->withSum('factures as recettes_total', 'montant')
                 ->when($this->search, fn ($query) => $query
@@ -135,6 +156,7 @@ class Manager extends Component
                     ->orWhere('modele', 'like', "%{$this->search}%"))
                 ->orderBy('designation')
                 ->paginate(10),
+            'enginEnEdition' => $this->enginId ? Engin::with('media')->find($this->enginId) : null,
         ]);
     }
 }

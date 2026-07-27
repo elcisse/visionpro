@@ -3,7 +3,6 @@
 namespace App\Livewire\Entreprise;
 
 use App\Models\Entreprise;
-use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -30,8 +29,6 @@ class Settings extends Component
     public string $devise = 'FCFA';
 
     public $logo = null;
-
-    public ?string $currentLogoPath = null;
 
     protected function rules(): array
     {
@@ -62,7 +59,6 @@ class Settings extends Component
             $this->email = (string) $entreprise->email;
             $this->site_web = (string) $entreprise->site_web;
             $this->devise = $entreprise->devise;
-            $this->currentLogoPath = $entreprise->logo;
         }
     }
 
@@ -73,16 +69,15 @@ class Settings extends Component
         $data = $this->validate();
         unset($data['logo']);
 
-        if ($this->logo) {
-            if ($this->currentLogoPath) {
-                Storage::disk('public')->delete($this->currentLogoPath);
-            }
-            $data['logo'] = $this->logo->store('entreprise', 'public');
-            $this->currentLogoPath = $data['logo'];
-        }
-
         $entreprise = Entreprise::updateOrCreate(['id' => $this->entrepriseId], $data);
         $this->entrepriseId = $entreprise->id;
+
+        if ($this->logo) {
+            $entreprise->addMedia($this->logo->getRealPath())
+                ->usingFileName($this->logo->getClientOriginalName())
+                ->toMediaCollection('logo');
+        }
+
         $this->logo = null;
 
         session()->flash('status', 'Informations de l\'entreprise enregistrées.');
@@ -90,6 +85,10 @@ class Settings extends Component
 
     public function render()
     {
-        return view('livewire.entreprise.settings');
+        return view('livewire.entreprise.settings', [
+            'currentLogoUrl' => $this->entrepriseId
+                ? Entreprise::find($this->entrepriseId)?->getFirstMediaUrl('logo')
+                : null,
+        ]);
     }
 }

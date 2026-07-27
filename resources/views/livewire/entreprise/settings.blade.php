@@ -51,8 +51,8 @@
                         <label class="d-block">Logo</label>
                         @if ($logo)
                             <img src="{{ $logo->temporaryUrl() }}" class="img-fluid mb-2" style="max-height: 150px;">
-                        @elseif ($currentLogoPath)
-                            <img src="{{ asset('storage/'.$currentLogoPath) }}" class="img-fluid mb-2" style="max-height: 150px;">
+                        @elseif ($currentLogoUrl)
+                            <img src="{{ $currentLogoUrl }}" class="img-fluid mb-2" style="max-height: 150px;">
                         @else
                             <div class="text-muted mb-2">Aucun logo</div>
                         @endif

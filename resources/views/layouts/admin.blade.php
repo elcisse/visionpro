@@ -41,7 +41,11 @@
         </nav>
 
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
+            @php ($logoUrl = \App\Models\Entreprise::first()?->getFirstMediaUrl('logo'))
             <a href="{{ route('dashboard') }}" wire:navigate class="brand-link">
+                @if ($logoUrl)
+                    <img src="{{ $logoUrl }}" alt="Logo" class="brand-image" style="opacity: .9; max-height: 33px; width: auto;">
+                @endif
                 <span class="brand-text font-weight-light ml-2">{{ config('app.name') }}</span>
             </a>
 

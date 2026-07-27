@@ -19,6 +19,7 @@
             <table class="table table-striped mb-0">
                 <thead>
                     <tr>
+                        <th>Photo</th>
                         <th>Désignation</th>
                         <th>Catégorie</th>
                         <th>Marque / Modèle</th>
@@ -35,6 +36,14 @@
                     @forelse ($engins as $engin)
                         @php ($rentabilite = ($engin->recettes_total ?? 0) - ($engin->charges_total ?? 0))
                         <tr wire:key="engin-{{ $engin->id }}">
+                            <td>
+                                @if ($engin->getFirstMediaUrl('photos', 'thumb'))
+                                    <img src="{{ $engin->getFirstMediaUrl('photos', 'thumb') }}" alt=""
+                                        style="width: 60px; height: 40px; object-fit: cover; border-radius: 4px;">
+                                @else
+                                    <div class="text-muted"><i class="fas fa-image"></i></div>
+                                @endif
+                            </td>
                             <td>{{ $engin->designation }}</td>
                             <td>{{ $engin->categorie }}</td>
                             <td>{{ $engin->marque }} {{ $engin->modele }}</td>
@@ -75,7 +84,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="10" class="text-center text-muted py-4">Aucun engin trouvé.</td>
+                            <td colspan="11" class="text-center text-muted py-4">Aucun engin trouvé.</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -140,6 +149,33 @@
                                         <option value="{{ $value }}">{{ $label }}</option>
                                     @endforeach
                                 </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Photos</label>
+                                <input type="file" wire:model="photos" accept="image/*" multiple class="form-control-file">
+                                <div wire:loading wire:target="photos" class="text-muted small mt-1">Envoi en cours...</div>
+                                @error('photos.*') <span class="text-danger d-block">{{ $message }}</span> @enderror
+
+                                <div class="d-flex flex-wrap mt-2" style="gap: 8px;">
+                                    @foreach ($photos as $photo)
+                                        <img src="{{ $photo->temporaryUrl() }}" style="width: 80px; height: 60px; object-fit: cover; border-radius: 4px;">
+                                    @endforeach
+
+                                    @if ($enginEnEdition)
+                                        @foreach ($enginEnEdition->getMedia('photos') as $media)
+                                            <div class="position-relative">
+                                                <img src="{{ $media->getUrl('thumb') }}" style="width: 80px; height: 60px; object-fit: cover; border-radius: 4px;">
+                                                <button type="button" wire:click="deletePhoto({{ $media->id }})"
+                                                    wire:confirm="Supprimer cette photo ?"
+                                                    class="btn btn-sm btn-danger position-absolute"
+                                                    style="top: -8px; right: -8px; padding: 0 6px; border-radius: 50%;">
+                                                    &times;
+                                                </button>
+                                            </div>
+                                        @endforeach
+                                    @endif
+                                </div>
                             </div>
                         </div>
                         <div class="modal-footer">

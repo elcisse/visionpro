@@ -3,9 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class Engin extends Model
+class Engin extends Model implements HasMedia
 {
+    use InteractsWithMedia;
+
     protected $fillable = [
         'designation',
         'categorie',
@@ -60,5 +65,19 @@ class Engin extends Model
     public function rentabilite(): float
     {
         return $this->recettesTotales() - $this->chargesTotales();
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('photos');
+    }
+
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this->addMediaConversion('thumb')
+            ->width(300)
+            ->height(200)
+            ->sharpen(10)
+            ->nonQueued();
     }
 }
