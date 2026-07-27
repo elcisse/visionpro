@@ -2,13 +2,15 @@
 
 ## Statut
 
-Projet initialisé le 2026-07-25 : squelette Laravel + Livewire + AdminLTE en place, base MySQL `vision_pro` créée et migrée. Intégration Livewire+AdminLTE vérifiée (page `/test-integration`, config `adminlte.livewire = true`).
+Projet initialisé le 2026-07-25 : squelette Laravel + Livewire en place, base MySQL `vision_pro` créée et migrée.
+
+**2026-07-27 : le package `jeroennoten/laravel-adminlte` a été retiré.** Cause : ses liens de menu provoquaient un rechargement complet de page à chaque clic ; on a voulu activer `wire:navigate` (navigation SPA native de Livewire) pour corriger ça, mais le JS jQuery du package (sidebar, widgets) n'est pas conçu pour survivre à une navigation sans rechargement — résultat : pages blanches. Solution retenue (voir section dédiée ci-dessous) : garder l'apparence AdminLTE (sa CSS compilée, déjà vendue dans `public/vendor/adminlte/dist/css/`) mais écrire notre propre layout/sidebar/navbar, sans jQuery, avec Alpine.js (fourni nativement par Livewire) pour l'interactivité. **Confirmé fonctionnel par l'utilisateur.**
 
 Modélisation des entités métier terminée (migrations + modèles Eloquent, relations câblées) : `entreprises`, `engins`, `chauffeurs`, `affectations` (historique chauffeur↔engin), `clients`, `contrats`, `pointages`, `maintenances`, `factures`, `paiements`, `charges`. `entreprises` et `engins` sont peuplées via seeders avec les données réelles des documents fournis.
 
 Rôles/permissions installés : `spatie/laravel-permission` avec 6 rôles (Super Admin, Gestionnaire de parc, Commercial, Superviseur de chantier, Comptable, Direction) et 48 permissions (12 modules × view/create/update/delete). Super Admin bypass tout via `Gate::before` dans `AppServiceProvider`. Seeder `RolePermissionSeeder`, appelé depuis `DatabaseSeeder`.
 
-Authentification minimale en place (pas de laravel/ui, pas de registration — app interne) : `App\Http\Controllers\Auth\LoginController` (login/logout classiques), vue `adminlte::auth.login` du package réutilisée directement, routes `/login` (guest) et `/logout` + `/dashboard` (auth) dans `routes/web.php`. `config/adminlte.php` : `dashboard_url=dashboard`, `register_url`/`password_reset_url` désactivés (false), menu latéral remplacé par le vrai menu de l'app (Tableau de bord, Engins avec `'can' => 'engins.view'`).
+Authentification minimale en place (pas de laravel/ui, pas de registration — app interne) : `App\Http\Controllers\Auth\LoginController` (login/logout classiques), vue autonome `resources/views/auth/login.blade.php` (ne dépend d'aucun package), routes `/login` (guest) et `/logout` + `/dashboard` (auth) dans `routes/web.php`.
 
 **Phase 0 (git) et Phase 1 (CRUD) terminées.** Dépôt : https://github.com/elcisse/visionpro (branche `main`, tout committé et poussé au fil de l'eau).
 
@@ -42,9 +44,18 @@ Ajoutés directement par l'utilisateur dans `composer.json`, pas encore intégr�
 ## Stack technique
 
 - Backend : Laravel 13 (PHP 8.4.13 en CLI)
-- Interface réactive : Livewire 4
-- Thème d'administration : AdminLTE (`jeroennoten/laravel-adminlte`, assets/config publiés)
+- Interface réactive : Livewire 4 (navigation SPA via `wire:navigate` sur tout le menu)
+- Apparence : CSS AdminLTE (`public/vendor/adminlte/dist/css/adminlte.min.css`) + FontAwesome, **sans le package** `jeroennoten/laravel-adminlte` ni jQuery — layout/sidebar/navbar maison, interactivité en Alpine.js
 - Base de données : MySQL (`vision_pro`, via MAMP)
+
+## Layout maison (remplace AdminLTE package)
+
+- `resources/views/layouts/admin.blade.php` : document HTML complet (plus de `@extends('adminlte::page')`). Reçoit `$slot` (contenu) et `$title` via `#[Layout('layouts.admin', ['title' => '...'])]` sur chaque composant Livewire — **contrat inchangé**, donc aucun des 11 modules CRUD n'a eu besoin d'être modifié lors de ce remplacement.
+- `resources/views/layouts/partials/sidebar-menu.blade.php` : menu latéral piloté par un tableau PHP (section → items avec `route`/`icon`/`can`), filtré par permission (`auth()->user()->can(...)`). Pour ajouter une entrée de menu : éditer ce fichier (remplace l'ancien `config/adminlte.php`).
+- Toggle sidebar en Alpine (`x-data="{ sidebarCollapsed: false }"` sur `<body>`), pas de jQuery/PushMenu.
+- `resources/views/auth/login.blade.php` : page de connexion autonome, mêmes classes CSS AdminLTE (`login-page`, `login-box`, `card`...).
+- Assets conservés : `public/vendor/adminlte/` (CSS uniquement, pas son JS), `public/vendor/fontawesome-free/`. Supprimés : jQuery, Bootstrap JS, Popper, OverlayScrollbars (plus utilisés, tout tourne en Alpine/Livewire).
+- **Piège à ne pas reproduire** : un thème d'admin basé sur jQuery (widgets initialisés au `DOMContentLoaded`) est structurellement incompatible avec `wire:navigate`, qui évite justement le rechargement complet (donc plus de `DOMContentLoaded` entre deux pages). Toute future lib JS ajoutée à cette appli doit être compatible SPA (Alpine, ou init idempotente via `livewire:navigated`), sinon prévoir de la garder hors des pages naviguées en SPA.
 
 ## Environnement local — points d'attention
 
