@@ -122,8 +122,8 @@ Plan complet (dev → déploiement) dans `docs/plan-deploiement.md`. Résumé :
 
 - ~~**Phase 0** : premier commit git + dépôt distant.~~ Fait.
 - ~~**Phase 1** : CRUD pour toutes les entités.~~ Fait.
-- **Phase 2** (reste à faire) : synchronisation du statut engin (disponible/en_location/en_panne/en_entretien) selon contrats/pannes/entretiens en cours ; calcul de rentabilité par engin (recettes factures − charges). Le calcul auto des heures/montant de facture et la synchro statut facture↔paiements sont déjà faits (voir ci-dessus).
-- **Phase 3** : dashboard & reporting (recettes réelles vs prévisionnelles, taux d'utilisation du parc, alertes).
+- ~~**Phase 2** : logique métier transverse.~~ Fait — `App\Services\EnginStatutService` synchronise le statut engin (disponible/en_location/en_panne/en_entretien, priorité panne > entretien > location, `hors_service` jamais touché automatiquement) après chaque save/delete de Contrat ou Maintenance ; `Engin::rentabilite()` (recettes via `factures()` hasManyThrough, − charges) affiché sur la liste des Engins.
+- **Phase 3** (prochaine) : dashboard & reporting (recettes réelles vs prévisionnelles, taux d'utilisation du parc, alertes).
 - **Phase 4** : intégration dompdf/medialibrary/activitylog/simple-excel (reportée, pas encore priorisée avec l'utilisateur).
 - **Phase 5-6** : tests automatisés, durcissement/revue de code.
 - **Phase 7-9** : préparation déploiement (PHP ≥ 8.4 requis chez l'hébergeur, mot de passe admin `admin123` à changer), déploiement, recette utilisateur, suivi post-lancement.
