@@ -34,7 +34,7 @@ Pas encore fait : logique métier transverse restante (synchronisation du statut
 ## Packages ajoutés par l'utilisateur (hors scaffolding initial) — Phase 4
 
 - ~~`barryvdh/laravel-dompdf`~~ **Intégré** : PDF contrats (`ContratPdfController`, `pdf/contrat.blade.php`) et factures (`FacturePdfController`, `pdf/facture.blade.php`), boutons sur les listes Contrats/Factures.
-- `spatie/laravel-medialibrary` — pas encore intégré (photos d'engins / logo entreprise).
+- ~~`spatie/laravel-medialibrary`~~ **Intégré** : `Engin` collection `photos` (galerie, conversion `thumb` 300×200 en `nonQueued`), `Entreprise` collection `logo` (`singleFile`, affiché dans la sidebar). Colonne `entreprises.logo` supprimée (remplacée par MediaLibrary).
 - `spatie/laravel-activitylog` — pas encore intégré (journal d'audit contrats/factures/paiements).
 - `spatie/simple-excel` — pas encore intégré (export Excel des rapports).
 
@@ -60,6 +60,7 @@ Pas encore fait : logique métier transverse restante (synchronisation du statut
   - **Utiliser `php artisan serve` pour le développement local** (tourne sur PHP 8.4.13 CLI, testé et fonctionnel).
   - Si on veut absolument passer par Apache/MAMP plus tard, il faudra installer une build PHP 8.4 Thread-Safe compatible Apache (non fournie avec cette install MAMP).
 - Identifiants MySQL dans `.env` (fichier gitignoré, ne pas committer) : utilisateur applicatif `elcisse` avec tous les droits sur la base `vision_pro`.
+- `APP_URL=http://127.0.0.1:8000` (corrigé le 2026-07-27, était resté sur l'ancienne config MAMP jamais utilisée) — génère les URLs de fichiers/médias. **À mettre à jour avec le vrai domaine lors du déploiement.**
 
 ## Contexte métier
 
