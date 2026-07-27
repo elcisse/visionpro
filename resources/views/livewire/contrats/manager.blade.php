@@ -60,6 +60,12 @@
                                 @endif
                             </td>
                             <td class="text-right">
+                                @can('contrats.view')
+                                    <a href="{{ route('contrats.pdf', $contrat) }}" target="_blank"
+                                        class="btn btn-sm btn-outline-dark" title="Générer le PDF du contrat">
+                                        <i class="fas fa-print"></i>
+                                    </a>
+                                @endcan
                                 @can('contrats.update')
                                     <button type="button" wire:click="edit({{ $contrat->id }})"
                                         class="btn btn-sm btn-outline-secondary">

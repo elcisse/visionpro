@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\ContratPdfController;
+use App\Http\Controllers\FacturePdfController;
 use App\Livewire\Charges\Manager as ChargesManager;
 use App\Livewire\Chauffeurs\Manager as ChauffeursManager;
 use App\Livewire\Clients\Manager as ClientsManager;
@@ -33,9 +35,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/chauffeurs', ChauffeursManager::class)->name('chauffeurs.index');
     Route::get('/clients', ClientsManager::class)->name('clients.index');
     Route::get('/contrats', ContratsManager::class)->name('contrats.index');
+    Route::get('/contrats/{contrat}/pdf', [ContratPdfController::class, 'show'])->name('contrats.pdf');
     Route::get('/pointages', PointagesManager::class)->name('pointages.index');
     Route::get('/maintenances', MaintenancesManager::class)->name('maintenances.index');
     Route::get('/factures', FacturesManager::class)->name('factures.index');
+    Route::get('/factures/{facture}/pdf', [FacturePdfController::class, 'show'])->name('factures.pdf');
     Route::get('/paiements', PaiementsManager::class)->name('paiements.index');
     Route::get('/charges', ChargesManager::class)->name('charges.index');
     Route::get('/entreprise', EntrepriseSettings::class)->name('entreprise.edit');

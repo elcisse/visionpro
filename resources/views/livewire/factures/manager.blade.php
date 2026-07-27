@@ -51,6 +51,12 @@
                                 </span>
                             </td>
                             <td class="text-right">
+                                @can('factures.view')
+                                    <a href="{{ route('factures.pdf', $facture) }}" target="_blank"
+                                        class="btn btn-sm btn-outline-dark" title="Générer le PDF de la facture">
+                                        <i class="fas fa-print"></i>
+                                    </a>
+                                @endcan
                                 @can('factures.update')
                                     <button type="button" wire:click="edit({{ $facture->id }})"
                                         class="btn btn-sm btn-outline-secondary">
