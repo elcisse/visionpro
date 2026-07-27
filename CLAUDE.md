@@ -35,7 +35,7 @@ Pas encore fait : logique métier transverse restante (synchronisation du statut
 
 - ~~`barryvdh/laravel-dompdf`~~ **Intégré** : PDF contrats (`ContratPdfController`, `pdf/contrat.blade.php`) et factures (`FacturePdfController`, `pdf/facture.blade.php`), boutons sur les listes Contrats/Factures.
 - ~~`spatie/laravel-medialibrary`~~ **Intégré** : `Engin` collection `photos` (galerie, conversion `thumb` 300×200 en `nonQueued`), `Entreprise` collection `logo` (`singleFile`, affiché dans la sidebar). Colonne `entreprises.logo` supprimée (remplacée par MediaLibrary).
-- `spatie/laravel-activitylog` — pas encore intégré (journal d'audit contrats/factures/paiements).
+- ~~`spatie/laravel-activitylog`~~ **Intégré** : `Contrat`/`Facture`/`Paiement` avec `LogsActivity`, page `App\Livewire\Audit\Manager` (route `audit.index`, permission `audit.view` — Super Admin + Direction). **Piège de cette version du package** : le détail des changements est dans la colonne `attribute_changes` (clés `attributes`/`old`), pas dans `properties` comme documenté pour les anciennes versions — à savoir si on ajoute `LogsActivity` à d'autres modèles plus tard.
 - `spatie/simple-excel` — pas encore intégré (export Excel des rapports).
 
 ## Stack technique
