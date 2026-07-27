@@ -10,7 +10,7 @@ class LoginController extends Controller
 {
     public function create()
     {
-        return view('adminlte::auth.login');
+        return view('auth.login');
     }
 
     public function store(Request $request)
