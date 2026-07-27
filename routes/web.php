@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Livewire\Charges\Manager as ChargesManager;
 use App\Livewire\Chauffeurs\Manager as ChauffeursManager;
 use App\Livewire\Clients\Manager as ClientsManager;
 use App\Livewire\Contrats\Manager as ContratsManager;
@@ -35,6 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/maintenances', MaintenancesManager::class)->name('maintenances.index');
     Route::get('/factures', FacturesManager::class)->name('factures.index');
     Route::get('/paiements', PaiementsManager::class)->name('paiements.index');
+    Route::get('/charges', ChargesManager::class)->name('charges.index');
 
     Route::get('/test-integration', function () {
         return view('test-integration');

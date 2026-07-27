@@ -339,6 +339,12 @@ return [
             'icon' => 'fas fa-fw fa-tools',
             'can' => 'maintenances.view',
         ],
+        [
+            'text' => 'Charges',
+            'route' => 'charges.index',
+            'icon' => 'fas fa-fw fa-gas-pump',
+            'can' => 'charges.view',
+        ],
         ['header' => 'Commercial'],
         [
             'text' => 'Clients',
