@@ -135,12 +135,13 @@ class Manager extends Component
 
         $contrat = Contrat::findOrFail($id);
         $engin = $contrat->engin;
-
-        if ($contrat->document_pdf) {
-            Storage::disk('public')->delete($contrat->document_pdf);
-        }
+        $documentPdf = $contrat->document_pdf;
 
         $contrat->delete();
+
+        if ($documentPdf) {
+            Storage::disk('public')->delete($documentPdf);
+        }
 
         EnginStatutService::synchroniser($engin);
     }

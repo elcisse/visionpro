@@ -40,7 +40,7 @@ class Settings extends Component
             'email' => 'nullable|email|max:255',
             'site_web' => 'nullable|string|max:255',
             'devise' => 'required|string|max:10',
-            'logo' => 'nullable|image|mimes:jpg,jpeg,png,svg|max:2048',
+            'logo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ];
     }
 

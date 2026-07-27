@@ -3,6 +3,7 @@
 namespace App\Livewire\Engins;
 
 use App\Models\Engin;
+use App\Services\EnginStatutService;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -100,6 +101,10 @@ class Manager extends Component
 
         $engin = Engin::updateOrCreate(['id' => $this->enginId], $data);
 
+        // Un statut choisi manuellement (autre que hors_service) est immédiatement
+        // recorrigé s'il ne correspond pas aux contrats/maintenances réellement en cours.
+        EnginStatutService::synchroniser($engin);
+
         foreach ($this->photos as $photo) {
             $engin->addMedia($photo->getRealPath())
                 ->usingFileName($photo->getClientOriginalName())
@@ -114,7 +119,14 @@ class Manager extends Component
     {
         $this->authorize('engins.update');
 
-        Media::findOrFail($mediaId)->delete();
+        $media = Media::findOrFail($mediaId);
+
+        abort_unless(
+            $media->model_type === Engin::class && $media->model_id === $this->enginId,
+            403
+        );
+
+        $media->delete();
     }
 
     public function delete(int $id): void
