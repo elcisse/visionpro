@@ -36,7 +36,9 @@ Pas encore fait : logique métier transverse restante (synchronisation du statut
 - ~~`barryvdh/laravel-dompdf`~~ **Intégré** : PDF contrats (`ContratPdfController`, `pdf/contrat.blade.php`) et factures (`FacturePdfController`, `pdf/facture.blade.php`), boutons sur les listes Contrats/Factures.
 - ~~`spatie/laravel-medialibrary`~~ **Intégré** : `Engin` collection `photos` (galerie, conversion `thumb` 300×200 en `nonQueued`), `Entreprise` collection `logo` (`singleFile`, affiché dans la sidebar). Colonne `entreprises.logo` supprimée (remplacée par MediaLibrary).
 - ~~`spatie/laravel-activitylog`~~ **Intégré** : `Contrat`/`Facture`/`Paiement` avec `LogsActivity`, page `App\Livewire\Audit\Manager` (route `audit.index`, permission `audit.view` — Super Admin + Direction). **Piège de cette version du package** : le détail des changements est dans la colonne `attribute_changes` (clés `attributes`/`old`), pas dans `properties` comme documenté pour les anciennes versions — à savoir si on ajoute `LogsActivity` à d'autres modèles plus tard.
-- `spatie/simple-excel` — pas encore intégré (export Excel des rapports).
+- ~~`spatie/simple-excel`~~ **Intégré** : export `.xlsx` du rapport Recettes prévisionnelles (`RecettesPrevisionnellesExportController`, `SimpleExcelWriter::streamDownload()`).
+
+**Phase 4 terminée** : les 4 packages ajoutés par l'utilisateur sont maintenant tous intégrés.
 
 ## Stack technique
 
@@ -121,7 +123,7 @@ Plan complet (dev → déploiement) dans `docs/plan-deploiement.md`. Résumé :
 - ~~**Phase 0** : premier commit git + dépôt distant.~~ Fait.
 - ~~**Phase 1** : CRUD pour toutes les entités.~~ Fait.
 - ~~**Phase 2** : logique métier transverse.~~ Fait — `App\Services\EnginStatutService` synchronise le statut engin (disponible/en_location/en_panne/en_entretien, priorité panne > entretien > location, `hors_service` jamais touché automatiquement) après chaque save/delete de Contrat ou Maintenance ; `Engin::rentabilite()` (recettes via `factures()` hasManyThrough, − charges) affiché sur la liste des Engins.
-- ~~**Phase 3** : dashboard & reporting.~~ Fait — `App\Livewire\Dashboard\Show` affiche recettes réelles vs prévisionnelles (mois), taux d'utilisation du parc, engins en panne/entretien, factures impayées (montant restant dû) et en retard. `APP_LOCALE=fr` pour l'affichage des dates.
-- **Phase 4** (en cours) : intégration dompdf (fait) / medialibrary / activitylog / simple-excel (reste à faire, voir section dédiée ci-dessus).
-- **Phase 5-6** : tests automatisés, durcissement/revue de code.
+- ~~**Phase 3** : dashboard & reporting.~~ Fait — `App\Livewire\Dashboard\Show` affiche recettes réelles vs prévisionnelles (mois), taux d'utilisation du parc, engins en panne/entretien, factures impayées (montant restant dû) et en retard. `APP_LOCALE=fr` pour l'affichage des dates. Complété par `App\Livewire\Rapports\RecettesPrevisionnelles` (route `rapports.recettes-previsionnelles`) : détail par engin façon document tarifaire initial (jour/semaine/mois/année × taux = total), + export Excel.
+- ~~**Phase 4** : intégration dompdf/medialibrary/activitylog/simple-excel.~~ Fait (voir section dédiée ci-dessus).
+- **Phase 5-6** (prochaine) : tests automatisés, durcissement/revue de code.
 - **Phase 7-9** : préparation déploiement (PHP ≥ 8.4 requis chez l'hébergeur, mot de passe admin `admin123` à changer), déploiement, recette utilisateur, suivi post-lancement.
