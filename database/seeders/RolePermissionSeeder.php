@@ -27,6 +27,9 @@ class RolePermissionSeeder extends Seeder
             }
         }
 
+        // Journal d'audit : lecture seule, pas de create/update/delete (l'historique ne se modifie pas).
+        Permission::firstOrCreate(['name' => 'audit.view', 'guard_name' => 'web']);
+
         $forModules = fn (array $modules) => collect($modules)
             ->crossJoin($actions)
             ->map(fn ($pair) => "{$pair[0]}.{$pair[1]}")
@@ -54,6 +57,6 @@ class RolePermissionSeeder extends Seeder
             ->syncPermissions($forModules(['factures', 'paiements', 'charges']));
 
         Role::firstOrCreate(['name' => 'Direction', 'guard_name' => 'web'])
-            ->syncPermissions($viewOnly($modules));
+            ->syncPermissions([...$viewOnly($modules), 'audit.view']);
     }
 }

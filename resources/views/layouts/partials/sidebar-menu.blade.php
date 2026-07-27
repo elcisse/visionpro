@@ -35,6 +35,7 @@
             'items' => [
                 ['text' => 'Entreprise', 'route' => 'entreprise.edit', 'icon' => 'fa-building', 'can' => 'entreprise.view'],
                 ['text' => 'Utilisateurs & rôles', 'route' => 'utilisateurs.index', 'icon' => 'fa-users-cog', 'can' => 'utilisateurs.view'],
+                ['text' => "Journal d'audit", 'route' => 'audit.index', 'icon' => 'fa-history', 'can' => 'audit.view'],
             ],
         ],
     ];

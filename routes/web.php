@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ContratPdfController;
 use App\Http\Controllers\FacturePdfController;
+use App\Livewire\Audit\Manager as AuditManager;
 use App\Livewire\Charges\Manager as ChargesManager;
 use App\Livewire\Chauffeurs\Manager as ChauffeursManager;
 use App\Livewire\Clients\Manager as ClientsManager;
@@ -44,4 +45,5 @@ Route::middleware('auth')->group(function () {
     Route::get('/charges', ChargesManager::class)->name('charges.index');
     Route::get('/entreprise', EntrepriseSettings::class)->name('entreprise.edit');
     Route::get('/utilisateurs', UtilisateursManager::class)->name('utilisateurs.index');
+    Route::get('/audit', AuditManager::class)->name('audit.index');
 });

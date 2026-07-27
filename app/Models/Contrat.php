@@ -3,9 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 
 class Contrat extends Model
 {
+    use LogsActivity;
+
     protected $fillable = [
         'client_id',
         'engin_id',
@@ -51,5 +55,14 @@ class Contrat extends Model
     public function factures()
     {
         return $this->hasMany(Facture::class);
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['numero', 'client_id', 'engin_id', 'date_debut', 'date_fin', 'lieu_chantier', 'tarif_horaire', 'statut'])
+            ->logOnlyDirty()
+            ->dontLogEmptyChanges()
+            ->useLogName('contrat');
     }
 }
